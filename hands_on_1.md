@@ -16,8 +16,8 @@ By the end of this exercise, participants will successfully connect a **local fi
 
 Ensure the following are ready **before starting**:
 
-* Claude Desktop (latest version)
-* Node.js installed
+* Claude Desktop (latest version), you can download it from [https://claude.com/download]
+* Node.js installed, install using this link [https://nodejs.org/en/download]
   Verify by running:
 
   ```bash
@@ -33,7 +33,7 @@ The Model Context Protocol (MCP) allows AI clients like Claude Desktop to intera
 
 ---
 
-## 🛠️ Step-by-Step Instructions
+## Step-by-Step Instructions
 
 ### Step 1: Open Claude Desktop Configuration
 
@@ -80,7 +80,7 @@ You should see an MCP/tool indicator near the chat input area.
 
 ---
 
-## 🧪 Hands-On Tasks
+## Hands-On Tasks
 
 Ask Claude to perform each of the following:
 
