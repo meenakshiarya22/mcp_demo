@@ -1,6 +1,6 @@
-# Weather MCP Server
+# MCP Hands-on Workshop
 
-This project is a reference implementation of a **Model Context Protocol (MCP)** server that connects to the **National Weather Service (NWS) API**. It allows MCP-compatible clients, such as **Claude for Desktop**, to fetch real-time weather alerts and forecasts for locations within the United States.
+This repository contains a comprehensive collection of **Model Context Protocol (MCP)** examples, exercises, and server implementations. It serves as both a learning resource and reference for building MCP-compatible applications that integrate AI assistants with external tools and services.
 
 ## Features
 
@@ -15,7 +15,7 @@ MCP servers provide three main capabilities to enhance LLM functionality:
 2.  **Tools:** Functions called by the LLM with user approval (this project's primary focus).
 3.  **Prompts:** Pre-written templates for specific tasks.
 
-## ⚠️ Critical Logging Requirements
+## Critical Logging Requirements
 
 When building or modifying **STDIO-based** MCP servers, **never write to standard output (stdout)**. Functions like `print()` in Python, `console.log()` in JavaScript, or `println!()` in Rust will **corrupt JSON-RPC messages** and break the server connection. 
 
@@ -43,16 +43,117 @@ Make sure to restart your terminal afterwards to ensure that the uv command gets
 3.  Add dependencies: `uv add "mcp[cli]" httpx`.
 4.  Run the server: `uv run weather.py`.
 
+## Additional MCP Server Examples
+
+This repository also contains additional MCP server implementations for learning and experimentation:
+
+### Weather Demo Server (`mcp_weather.py`)
+
+A simplified weather MCP server that provides simulated weather data for demonstration purposes.
+
+**Features:**
+- `get_weather(city: str)` - Returns simulated weather information for a given city
+- Returns temperature, conditions, and observation timestamp
+
+**Usage:**
+```bash
+python mcp_weather.py
+```
+
+**Example Tool Response:**
+```
+City: New York
+Temperature: 28°C
+Condition: Cloudy
+Observed At: 2024-01-08T10:30:00Z
+```
+
+### Calculator Server (`mcp_calculator.py`)
+
+A mathematical calculator MCP server that safely evaluates mathematical expressions.
+
+**Features:**
+- `calculate(expression: str)` - Evaluates mathematical expressions safely
+- Supports basic arithmetic operations and mathematical functions
+- Uses a restricted evaluation environment for security
+
+**Supported Operations:**
+- Basic arithmetic: `+`, `-`, `*`, `/`
+- Functions: `abs()`, `round()`, `min()`, `max()`, `pow()`, `sqrt()`
+
+**Usage:**
+```bash
+python mcp_calculator.py
+```
+
+**Example Usage:**
+- Expression: `"2 + 3 * 4"`
+- Result: `"Result: 14"`
+
+### Connecting Additional Servers to Claude Desktop
+
+To use these additional servers with Claude Desktop, add them to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "weather": {
+      "command": "uv",
+      "args": ["--directory", "/ABSOLUTE/PATH/TO/weather", "run", "weather.py"]
+    },
+    "weather-demo": {
+      "command": "python",
+      "args": ["/ABSOLUTE/PATH/TO/mcp_weather.py"]
+    },
+    "calculator": {
+      "command": "python",
+      "args": ["/ABSOLUTE/PATH/TO/mcp_calculator.py"]
+    }
+  }
+}
+```
+
 ---
 
 ## Server Tools
 
-The following tools are exposed by this server:
+This project contains multiple MCP servers, each exposing different tools:
+
+### Main Weather Server (`weather.py`)
 
 | Tool Name | Description | Arguments |
 | :--- | :--- | :--- |
 | `get_alerts` | Get active weather alerts for a US state. | `state` (Two-letter code, e.g., "CA"). |
 | `get_forecast` | Get a 5-period weather forecast for a location. | `latitude` (number), `longitude` (number). |
+
+### Weather Demo Server (`mcp_weather.py`)
+
+| Tool Name | Description | Arguments |
+| :--- | :--- | :--- |
+| `get_weather` | Get simulated current weather for a city. | `city` (string, e.g., "New York"). |
+
+**Response Format:**
+```
+City: {city}
+Temperature: 28°C
+Condition: Cloudy
+Observed At: {timestamp}Z
+```
+
+### Calculator Server (`mcp_calculator.py`)
+
+| Tool Name | Description | Arguments |
+| :--- | :--- | :--- |
+| `calculate` | Safely evaluate a mathematical expression. | `expression` (string, e.g., "2 + 3 * 4"). |
+
+**Supported Operations:**
+- Basic arithmetic: `+`, `-`, `*`, `/`
+- Mathematical functions: `abs()`, `round()`, `min()`, `max()`, `pow()`, `sqrt()`
+
+**Response Format:**
+```
+Result: {calculated_value}
+```
 
 ---
 
